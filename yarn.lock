@@ -99,6 +99,10 @@
   version "23.3.1"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.1.tgz#a4319aedb071d478e6f407d1c4578ec8156829cf"
 
+"@types/lodash@^4.14.116":
+  version "4.14.116"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.116.tgz#5ccf215653e3e8c786a58390751033a9adca0eb9"
+
 "@types/node@^8.0.24":
   version "8.10.23"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.23.tgz#e5ccfdafff42af5397c29669b6d7d65f7d629a00"
@@ -4584,7 +4588,7 @@ rc@^1.0.1, rc@^1.1.2, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-360-web@~1.0.0:
+react-360-web@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-360-web/-/react-360-web-1.0.2.tgz#12b355e61d1ce83e59609c2d8df0cc4b57a33b3a"
   dependencies:

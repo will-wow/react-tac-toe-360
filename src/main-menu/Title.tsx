@@ -11,7 +11,7 @@ const Title = () => (
         textAlignVertical: "center"
       }}
     >
-      React Tac Toe
+      Soundscape
     </Text>
   </View>
 );

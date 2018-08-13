@@ -12,10 +12,13 @@ function init(bundle, parent, options = {}) {
 
   // Render your app content to the default cylinder surface
   r360.renderToSurface(
-    r360.createRoot("ReactTacToe", {
-      /* initial props */
-    }),
+    r360.createRoot("SoundScape", {}),
     r360.getDefaultSurface()
+  );
+
+  r360.renderToLocation(
+    r360.createRoot("SoundSphere", {}),
+    r360.getDefaultLocation()
   );
 
   // Load the initial environment
