@@ -20,3 +20,5 @@ export const toPositionTransforms = ({ x, y, z }: t): PositionTrasnsforms => [
 ];
 
 export const toAudioPosition = ({ x, y, z }: t): AudioPosition => [x, y, z];
+
+export const create = (x = 0, y = 0, z = 0): t => ({ x, y, z });

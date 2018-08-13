@@ -1,12 +1,17 @@
 import * as React from "react";
-import { View, Text, VrButton } from "react-360";
+import { View, Text, VrButton, StyleSheet } from "react-360";
 
 const Button = ({ text, onClick }) => (
-  <View style={{ margin: 0.1, height: 0.3, backgroundColor: "#1AC8F7" }}>
-    <VrButton onClick={onClick}>
-      <Text style={{ fontSize: 0.2, textAlign: "center" }}>{text}</Text>
-    </VrButton>
-  </View>
+  <VrButton onClick={onClick} style={styles.button}>
+    <Text style={styles.text}>{text}</Text>
+  </VrButton>
 );
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "#639dda"
+  },
+  text: { fontSize: 30, textAlign: "center" }
+});
 
 export default Button;

@@ -1,71 +1,46 @@
 import * as React from "react";
-import { asset, Text, StyleSheet, View, NativeModules } from "react-360";
+import { asset, StyleSheet, View } from "react-360";
 import Entity from "Entity";
+import * as R from "ramda";
 
+import { connectWithStore } from "../store";
 import * as Location from "./location";
-import { AudioOptions } from "./audio-module";
+import { AudioOptions, playSound, stopSound } from "./audio-module";
 import { PositionTrasnsforms } from "./transforms";
+import { onStartPlaying, onStopPlaying } from "./actions";
 
-const { AudioModule } = NativeModules;
-
-interface SoundSphereState {
+interface SoundSphereProps {
+  gameStarted: boolean;
   location: Location.t;
 }
 
 const audioHandle = "sphere";
-const timeToMove = 2000;
-const defaultAudioOptions = {
+const defaultAudioOptions: AudioOptions = {
   source: asset("hey.mp3"),
   is3d: true,
   loop: false
 };
 
-class SoundSphere extends React.Component<null, SoundSphereState> {
-  interval: number;
+class SoundSphere extends React.Component<SoundSphereProps> {
+  componentDidUpdate(prevProps) {
+    const { location } = this.props;
+    const { location: prevLocation } = prevProps;
 
-  state = {
-    location: {
-      x: 0,
-      y: 0,
-      z: 0
+    if (!R.equals(location, prevLocation)) {
+      const position = Location.toAudioPosition(location);
+      playSound(audioHandle, defaultAudioOptions, position);
     }
-  };
-  componentDidMount() {
-    this.randomMove();
-    this.interval = setInterval(this.randomMove, timeToMove);
   }
 
   componentWillUnmount() {
-    AudioModule.destroy(audioHandle);
-    clearInterval(this.interval);
+    stopSound(audioHandle);
   }
 
-  move = (location: Location.t): void => {
-    this.setState(
-      {
-        location
-      },
-      this.play
-    );
-  };
-
-  randomMove = (): void => {
-    const move = Location.random();
-    this.move(move);
-  };
-
-  play = () => {
-    const { location } = this.state;
-    const position = Location.toAudioPosition(location);
-
-    const audioOptions: AudioOptions = { ...defaultAudioOptions, position };
-
-    AudioModule.createAudio(audioHandle, audioOptions);
-    AudioModule.play(audioHandle);
-  };
-
   render() {
-    const { location } = this.state;
+    const { gameStarted, location } = this.props;
+
+    if (!gameStarted) return null;
+
     const transform: PositionTrasnsforms = Location.toPositionTransforms(
       location
     );
@@ -91,4 +66,11 @@ const styles = StyleSheet.create({
   sphere: {}
 });
 
-export default SoundSphere;
+export { SoundSphere };
+
+const mapStateToProps = state => ({
+  gameStarted: state.sphere.gameStarted,
+  location: state.sphere.location
+});
+
+export default connectWithStore(mapStateToProps)(SoundSphere);
