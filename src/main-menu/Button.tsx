@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, VrButton, StyleSheet } from "react-360";
+import {  Text, VrButton, StyleSheet } from "react-360";
 
 const Button = ({ text, onClick }) => (
   <VrButton onClick={onClick} style={styles.button}>

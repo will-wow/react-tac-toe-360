@@ -1,17 +1,19 @@
 import * as React from "react";
-import { asset, StyleSheet, View } from "react-360";
-import Entity from "Entity";
 import * as R from "ramda";
+import Entity from "Entity";
+import { bindActionCreators } from "redux";
+import { asset, StyleSheet, View, VrButton } from "react-360";
 
-import { connectWithStore } from "../store";
 import * as Location from "./location";
+import { connectWithStore } from "../store";
 import { AudioOptions, playSound, stopSound } from "./audio-module";
 import { PositionTrasnsforms } from "./transforms";
-import { onStartPlaying, onStopPlaying } from "./actions";
+import { onSphereFound } from "./actions";
 
 interface SoundSphereProps {
   gameStarted: boolean;
   location: Location.t;
+  onSphereFound: () => void;
 }
 
 const audioHandle = "sphere";
@@ -37,7 +39,7 @@ class SoundSphere extends React.Component<SoundSphereProps> {
   }
 
   render() {
-    const { gameStarted, location } = this.props;
+    const { gameStarted, location, onSphereFound } = this.props;
 
     if (!gameStarted) return null;
 
@@ -47,13 +49,14 @@ class SoundSphere extends React.Component<SoundSphereProps> {
 
     return (
       <View style={styles.resetPosition}>
-        <Entity
-          style={[styles.sphere, { transform }]}
-          source={{
-            obj: asset("sphere/tinker.obj"),
-            mtl: asset("sphere/obj.mtl")
-          }}
-        />
+        <VrButton onClick={onSphereFound} style={{ transform }}>
+          <Entity
+            source={{
+              obj: asset("sphere/tinker.obj"),
+              mtl: asset("sphere/obj.mtl")
+            }}
+          />
+        </VrButton>
       </View>
     );
   }
@@ -62,8 +65,7 @@ class SoundSphere extends React.Component<SoundSphereProps> {
 const styles = StyleSheet.create({
   resetPosition: {
     transform: [{ translateY: -27 }]
-  },
-  sphere: {}
+  }
 });
 
 export { SoundSphere };
@@ -73,4 +75,14 @@ const mapStateToProps = state => ({
   location: state.sphere.location
 });
 
-export default connectWithStore(mapStateToProps)(SoundSphere);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      onSphereFound
+    },
+    dispatch
+  );
+
+export default connectWithStore(mapStateToProps, mapDispatchToProps)(
+  SoundSphere
+);

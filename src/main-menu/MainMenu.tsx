@@ -1,22 +1,28 @@
 import * as React from "react";
 import { View, StyleSheet, Text } from "react-360";
+import { bindActionCreators } from "redux";
+
 import { onStartPlaying, onStopPlaying } from "../sphere/actions";
 import { connectWithStore } from "../store";
 
 import Button from "./Button";
-import { bindActionCreators } from "redux";
 
 interface MainMenuProps {
   gameStarted: boolean;
   onStartPlaying: () => void;
   onStopPlaying: () => void;
+  sphereMoves: number;
+  spheresFound: number;
 }
 
 const MainMenu: React.StatelessComponent<MainMenuProps> = ({
   gameStarted,
+  sphereMoves,
+  spheresFound,
   onStartPlaying,
   onStopPlaying
 }) => {
+  console.log("sphers", sphereMoves, spheresFound);
   return (
     <View style={styles.panel}>
       <View style={styles.greetingBox}>
@@ -25,6 +31,12 @@ const MainMenu: React.StatelessComponent<MainMenuProps> = ({
           <Button onClick={onStopPlaying} text="Stop" />
         ) : (
           <Button onClick={onStartPlaying} text="Play!" />
+        )}
+
+        {gameStarted && (
+          <Text>
+            {spheresFound}/{sphereMoves} Found
+          </Text>
         )}
       </View>
     </View>
@@ -54,7 +66,9 @@ const styles = StyleSheet.create({
 export { MainMenu };
 
 const mapStateToProps = state => ({
-  gameStarted: state.sphere.gameStarted
+  gameStarted: state.sphere.gameStarted,
+  sphereMoves: state.sphere.sphereMoves,
+  spheresFound: state.sphere.spheresFound
 });
 
 const mapDispatchToProps = dispatch =>

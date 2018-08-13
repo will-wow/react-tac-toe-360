@@ -1,4 +1,5 @@
 import { Reducer } from "redux";
+import * as R from "ramda";
 import * as Location from "./location";
 
 import {
@@ -6,19 +7,24 @@ import {
   END_GAME,
   MOVE,
   START_INTERVAL,
-  CLEAR_INTERVAL
+  CLEAR_INTERVAL,
+  SPHERE_FOUND
 } from "./actions";
 
 interface SphereState {
   gameStarted: boolean;
   interval: number | null;
   location: Location.t;
+  sphereMoves: number;
+  spheresFound: number;
 }
 
 const initialState: SphereState = {
   gameStarted: false,
   interval: null,
-  location: Location.create()
+  location: Location.create(),
+  sphereMoves: 0,
+  spheresFound: 0
 };
 
 const reducer: Reducer<SphereState> = (state = initialState, action) => {
@@ -30,14 +36,20 @@ const reducer: Reducer<SphereState> = (state = initialState, action) => {
       };
     }
     case END_GAME: {
-      return {
-        ...state,
-        gameStarted: false
-      };
+      return initialState;
+    }
+    case SPHERE_FOUND: {
+      return R.evolve({ spheresFound: R.add(1) }, state);
     }
     case MOVE: {
-      const location = action.data;
-      return { ...state, location };
+      const location: Location.t = action.data;
+      return R.evolve(
+        {
+          location: R.always(location),
+          sphereMoves: R.add(1)
+        },
+        state
+      );
     }
     case START_INTERVAL: {
       const interval = action.data;
