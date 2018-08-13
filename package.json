@@ -12,7 +12,7 @@
     "format-eslint": "eslint --fix **/*.{js,jsx}",
     "format-tslint": "tslint -p . --config tslint.json",
     "format-prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json}\"",
-    "deploy": "surge -p ./vr/build -d vr-tic-tac-toe.surge.sh"
+    "deploy": "surge -p ./build -d soundscapevr.surge.sh"
   },
   "dependencies": {
     "@types/lodash": "^4.14.116",
